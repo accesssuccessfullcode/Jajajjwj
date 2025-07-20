@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Permission Based Access</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    video {
+      width: 300px;
+      border: 2px solid #333;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Website Needs Permission</h1>
+  <p>Allow location and camera access to continue.</p>
+
+  <button onclick="getLocation()">Allow Location</button>
+  <p id="location"></p>
+
+  <button onclick="startCamera()">Allow Camera + Mic</button>
+  <video autoplay playsinline muted></video>
+
+  <script>
+    // LOCATION ACCESS
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            document.getElementById("location").textContent =
+              `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`;
+          },
+          error => {
+            alert("Location permission denied or unavailable.");
+          }
+        );
+      } else {
+        alert("Geolocation is not supported.");
+      }
+    }
+
+    // CAMERA & MIC ACCESS
+    function startCamera() {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          document.querySelector("video").srcObject = stream;
+        })
+        .catch(error => {
+          alert("Camera or microphone access denied.");
+        });
+    }
+  </script>
+</body>
+</html>
